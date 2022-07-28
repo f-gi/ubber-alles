@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "387448522564",
+    "project_id": "uberalles-8957e",
+    "storage_bucket": "uberalles-8957e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387448522564:android:8f81aaecf4dbd960d13911",
+        "android_client_info": {
+          "package_name": "com.uberalles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387448522564-a116bvltcvdoh3gu4gk5452r60190g54.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmqkV8TuW1UBbn3x9k39j6LW8Mlkdc8ZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387448522564-a116bvltcvdoh3gu4gk5452r60190g54.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
