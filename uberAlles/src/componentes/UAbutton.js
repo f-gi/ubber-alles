@@ -3,7 +3,6 @@ import {Text, StyleSheet, TouchableHighlight} from 'react-native';
 import {COLORS} from '../assets/colors';
 
 const UAbutton = props => {
-    // console.log(props);
     return (
         <TouchableHighlight style={styles.button} onPress={props.onClick}>
             <Text style={styles.text}>{props.text}</Text>

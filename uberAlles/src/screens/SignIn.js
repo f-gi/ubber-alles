@@ -1,47 +1,83 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import UAbutton from '../componentes/UAbutton';
 import {COLORS} from '../assets/colors';
+import app from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 
 const SignIn = props => {
+  console.log(app);
+  console.log(auth);
+
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
+
   const recoverPassword = () => {
     alert('recuperar senha');
   };
 
   const login = () => {
+    console.log(`E-mail = ${email} Senha = ${pass}`);
     alert('Logar');
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.signInSection}>
-        <Image
-          style={styles.image}
-          source={require('../assets/images/logo.png')}
-          accessibilityLabel="Imagem fake"
-        />
-        <TextInput style={styles.input} />
-        <TextInput style={styles.input} />
-        <Text
-          style={styles.forgotPasswordText}
-          // onPress={() => props.navigation.navigate('Home')}
-          onPress={recoverPassword}>
-          Esqueceu sua senha?
-        </Text>
-        <UAbutton text="Entrar" onClick={login} />
-      </View>
-      <View style={styles.signUpSection}>
-        <View style={styles.hrContaner}>
-          <View style={styles.hr} />
-          <Text style={styles.hrText}>OU</Text>
-          <View style={styles.hr} />
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.signInSection}>
+          <Image
+            style={styles.image}
+            source={require('../assets/images/logo.png')}
+            accessibilityLabel="Imagem fake"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="E-mail"
+            keyboardType="email-address"
+            returnKeyType="next"
+            onChangeText={t => setEmail(t)}
+            onEndEditing={() => this.passTextInput.focus()}
+          />
+          <TextInput
+            ref={ref => {
+              this.passTextInput = ref;
+            }}
+            style={styles.input}
+            placeholder="Senha"
+            keyboardType="default"
+            returnKeyType="go"
+            onChangeText={t => setPass(t)}
+          />
+          <Text style={styles.forgotPasswordText} onPress={recoverPassword}>
+            Esqueceu sua senha?
+          </Text>
+          <UAbutton text="Entrar" onClick={login} />
         </View>
-        <View style={styles.subscribe}>
-          <Text style={styles.subscribeText}>Não possui conta?</Text>
-          <Text style={styles.subscribeLink}> Cadastre-se</Text>
+        <View style={styles.signUpSection}>
+          <View style={styles.hrContaner}>
+            <View style={styles.hr} />
+            <Text style={styles.hrText}>OU</Text>
+            <View style={styles.hr} />
+          </View>
+          <View style={styles.subscribe}>
+            <Text style={styles.subscribeText}>Não possui conta? </Text>
+            <Text
+              onPress={() => props.navigation.navigate('SignUp')}
+              style={styles.subscribeLink}>
+              Cadastre-se
+            </Text>
+          </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
