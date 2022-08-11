@@ -33,32 +33,22 @@ export default App;
 const SignInStyle = {
   // headerLeft: false,
   title: 'Bem vindo',
-  headerStyle: {
-    backgroundColor: COLORS.primary,
-  },
-  headerTitleStyle: {
-    color: 'white',
-  },
+  headerStyle: {backgroundColor: COLORS.primary},
+  headerTitleStyle: {color: 'white'},
 };
 
 const SignUpStyle = {
   title: 'Criar conta',
-  headerStyle: {
-    backgroundColor: COLORS.primary,
-  },
-  headerTitleStyle: {
-    color: 'white',
-  },
+  headerStyle: {backgroundColor: COLORS.primary},
+  headerTitleStyle: {color: 'white'},
+  headerTintColor: 'white',
 };
 
 const ForgotPassStyle = {
   title: 'Recuperar senha',
-  headerStyle: {
-    backgroundColor: COLORS.primary,
-  },
-  headerTitleStyle: {
-    color: 'white',
-  },
+  headerStyle: {backgroundColor: COLORS.primary},
+  headerTitleStyle: {color: 'white'},
+  headerTintColor: 'white',
 };
 
 // const GeneralBar = {
