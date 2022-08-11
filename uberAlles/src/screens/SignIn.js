@@ -1,3 +1,5 @@
+// tratar campos vazios
+// tratar input quando login da errado
 import React, {useState} from 'react';
 import {
   View,
@@ -7,26 +9,64 @@ import {
   TextInput,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import UAbutton from '../componentes/UAbutton';
 import {COLORS} from '../assets/colors';
-import app from '@react-native-firebase/app';
+// import app from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import {CommonActions} from '@react-navigation/native';
 
 const SignIn = props => {
-  console.log(app);
-  console.log(auth);
-
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
 
   const recoverPassword = () => {
-    alert('recuperar senha');
+    props.navigation.navigate('ForgotPass');
   };
 
   const login = () => {
+    //tratar focus ao errar
     console.log(`E-mail = ${email} Senha = ${pass}`);
-    alert('Logar');
+    if (email !== '' && pass !== '') {
+      auth()
+        .signInWithEmailAndPassword(email, pass)
+        .then(() => {
+          props.navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'Home'}],
+            }),
+          );
+
+          setEmail('');
+          setPass('');
+        })
+        .catch(e => {
+          console.log('erro ao logar: ' + e);
+          switch (e.code) {
+            case 'auth/user-not-found':
+              Alert.alert('Erro', 'Usuário não cadastrado');
+              break;
+            case 'auth/invalid-email':
+              Alert.alert('Erro', 'E-mail inválido');
+              break;
+            case 'auth/wrong-password':
+              Alert.alert('Erro', 'Senha incorreta');
+              break;
+            case 'auth/user-disabled':
+              Alert.alert('Erro', 'Usuário desabilitado');
+              break;
+            case 'auth/too-many-requests':
+              Alert.alert(
+                'Bloqueamos todas as solicitações deste dispositivo devido a atividades incomuns. Tente mais tarde. [ O acesso a esta conta foi temporariamente desativado devido a muitas tentativas de login com falha. Você pode restaurá-lo imediatamente redefinindo sua senha ou pode tentar novamente mais tarde. ]',
+              );
+              break;
+          }
+        });
+    } else {
+      Alert.alert('Erro', 'Informe um e-mail e senha');
+    }
   };
 
   return (
@@ -44,12 +84,14 @@ const SignIn = props => {
             keyboardType="email-address"
             returnKeyType="next"
             onChangeText={t => setEmail(t)}
-            onEndEditing={() => this.passTextInput.focus()}
+            // onEndEditing={() => this.passTextInput.focus()}
           />
+          {/* adicionar botão de olho que mude o secureTextEntry para visualizar a senha */}
           <TextInput
-            ref={ref => {
-              this.passTextInput = ref;
-            }}
+            // ref={ref => {
+            //   this.passTextInput = ref;
+            // }}
+            secureTextEntry={true}
             style={styles.input}
             placeholder="Senha"
             keyboardType="default"
