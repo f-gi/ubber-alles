@@ -27,7 +27,6 @@ const SignIn = props => {
 
   const login = () => {
     //tratar focus ao errar
-    console.log(`E-mail = ${email} Senha = ${pass}`);
     if (email !== '' && pass !== '') {
       auth()
         .signInWithEmailAndPassword(email, pass)

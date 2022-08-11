@@ -15,13 +15,12 @@ const ForgotPass = ({navigation}) => {
         .then(() => {
           Alert.alert(
             'Atenção:',
-            'Enviamos um email de recuperação de senha para o seguinte endereço' +
+            'Enviamos um email de recuperação de senha para o seguinte endereço ' +
               email,
             [{text: 'OK', onPress: () => navigation.goBack()}],
           );
         })
         .catch(e => {
-          console.log(e);
           switch (e.code) {
             case 'auth/user-not-found':
               Alert.alert('Erro', 'Email não cadastrado');
