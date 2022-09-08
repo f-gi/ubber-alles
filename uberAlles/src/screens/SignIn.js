@@ -31,13 +31,16 @@ const SignIn = props => {
       auth()
         .signInWithEmailAndPassword(email, pass)
         .then(() => {
-          props.navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{name: 'Home'}],
-            }),
-          );
-
+          if (auth().currentUser.emailVerified) {
+            props.navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{name: 'Home'}],
+              }),
+            );
+          } else {
+            Alert.alert('Erro', 'E-mail da conta não confirmado!');
+          }
           setEmail('');
           setPass('');
         })

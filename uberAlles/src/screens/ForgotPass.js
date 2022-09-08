@@ -17,7 +17,8 @@ const ForgotPass = ({navigation}) => {
             'Atenção:',
             'Enviamos um email de recuperação de senha para o seguinte endereço ' +
               email,
-            [{text: 'OK', onPress: () => navigation.goBack()}],
+            [{text: 'OK', onPress: () => navigation.navigate('SignIn')}],
+            // onPress: () => navigation.navigate('SignIn'),
           );
         })
         .catch(e => {

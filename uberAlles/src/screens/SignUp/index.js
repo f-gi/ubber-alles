@@ -1,33 +1,63 @@
 import React, {useState} from 'react';
 import {Body, TextInput} from './styles';
 import UAbutton from '../../componentes/UAbutton';
-import auth from '@react-native-firebase/auth';
+import auth, {firebase} from '@react-native-firebase/auth';
 import {Alert} from 'react-native';
-// import {CommonActions} from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
 
-  const register = ({navigation}) => {
+  const register = () => {
     if (email !== '' && pass !== '' && name !== '') {
       if (pass === confirmPass) {
         if (pass.length > 5) {
           auth()
             .createUserWithEmailAndPassword(email, pass)
             .then(() => {
-              Alert.alert(
-                'Sucesso!',
-                'Usuário criado com sucesso, por favor realize o login para continuar',
-                [
-                  {
-                    text: 'OK',
-                    onPress: () => navigation.navigate('SignIn'),
-                  },
-                ],
-              );
+              var user = firebase.auth().currentUser;
+              user
+                .sendEmailVerification()
+                .then(() => {
+                  Alert.alert(
+                    'Aviso!',
+                    'Foi enviado um e-mail de verificação para: ' + email,
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () =>
+                          navigation.dispatch(
+                            CommonActions.reset({
+                              index: 0,
+                              routes: [{name: 'SignIn'}],
+                            }),
+                          ),
+                      },
+                    ],
+                  );
+                })
+                .catch(e => {
+                  Alert.alert('Aviso!', 'Erro');
+                });
+              // Alert.alert(
+              //   'Sucesso!',
+              //   'Usuário criado com sucesso, por favor realize o login para continuar',
+              //   [
+              //     {
+              //       text: 'OK',
+              //       onPress: () =>
+              //         navigation.dispatch(
+              //           CommonActions.reset({
+              //             index: 0,
+              //             routes: [{name: 'SignIn'}],
+              //           }),
+              //         ),
+              //     },
+              //   ],
+              // );
             })
             .catch(e => {
               console.log(e);
