@@ -13,9 +13,10 @@ import {
 } from 'react-native';
 import UAbutton from '../componentes/UAbutton';
 import {COLORS} from '../assets/colors';
-// import app from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 const SignIn = props => {
   const [email, setEmail] = useState('');
@@ -25,22 +26,49 @@ const SignIn = props => {
     props.navigation.navigate('ForgotPass');
   };
 
+  const storeUserCache = async value => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('user', jsonValue);
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        }),
+      );
+    } catch (e) {
+      console.log('Sign: erro no storage: ', e);
+    }
+  };
+
+  const getUser = () => {
+    firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          storeUserCache(doc.data());
+        } else {
+          console.log('No such document!');
+        }
+      })
+      .catch(e => {
+        console.log('Error getting document:', e);
+      });
+  };
+
   const login = () => {
     //tratar focus ao errar
     if (email !== '' && pass !== '') {
       auth()
         .signInWithEmailAndPassword(email, pass)
         .then(() => {
-          if (auth().currentUser.emailVerified) {
-            props.navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{name: 'Home'}],
-              }),
-            );
-          } else {
+          if (!auth().currentUser.emailVerified) {
             Alert.alert('Erro', 'E-mail da conta não confirmado!');
+            return;
           }
+          getUser();
           setEmail('');
           setPass('');
         })
