@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './src/screens/Home';
 import SignIn from './src/screens/SignIn';
 import SignUp from './src/screens/SignUp';
+import Preload from './src/screens/Preload';
 import ForgotPass from './src/screens/ForgotPass';
 import {StatusBar} from 'react-native';
 import {COLORS} from './src/assets/colors';
@@ -14,7 +15,13 @@ const App = () => {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor={COLORS.primaryDark} />
+      {/* initialRouteName="Preload" */}
       <Stack.Navigator>
+        <Stack.Screen
+          name="Preload"
+          component={Preload}
+          options={PreloadStyle}
+        />
         <Stack.Screen name="SignIn" component={SignIn} options={SignInStyle} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="SignUp" component={SignUp} options={SignUpStyle} />
@@ -29,6 +36,10 @@ const App = () => {
 };
 
 export default App;
+
+const PreloadStyle = {
+  headerShown: false,
+};
 
 const SignInStyle = {
   // headerLeft: false,

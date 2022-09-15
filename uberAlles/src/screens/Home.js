@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import UAbutton from '../componentes/UAbutton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = props => {
   const [contador, setContador] = useState(0);
@@ -30,17 +29,6 @@ const Home = props => {
   const reset = () => {
     setContador(0);
   };
-
-  const getUserCache = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('user');
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      console.log('Home: erro na busca de dados do storage: ', e);
-    }
-  };
-
-  getUserCache();
 
   return (
     <View>

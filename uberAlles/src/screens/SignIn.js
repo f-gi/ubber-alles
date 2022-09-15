@@ -28,6 +28,7 @@ const SignIn = props => {
 
   const storeUserCache = async value => {
     try {
+      value.pass = pass; //guardando a senha
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('user', jsonValue);
       props.navigation.dispatch(
