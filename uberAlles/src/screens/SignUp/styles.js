@@ -15,3 +15,8 @@ export const TextInput = styled.TextInput`
   padding-left: 2px;
   padding-bottom: 1px;
 `;
+
+export const Div = styled.View`
+  flex: 1;
+  align-items: center;
+`;

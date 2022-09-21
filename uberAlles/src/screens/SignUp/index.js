@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Body, TextInput} from './styles';
 import UAbutton from '../../componentes/UAbutton';
 import auth from '@react-native-firebase/auth';
-import {Alert} from 'react-native';
+import {Alert, Switch, Text, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 
@@ -11,6 +11,9 @@ const SignUp = ({navigation}) => {
   const [name, setName] = useState('');
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
+  const [model, setModel] = useState('');
+  const [board, setBoard] = useState('');
+  const [color, setColor] = useState('');
 
   const register = () => {
     if (email !== '' && pass !== '' && name !== '') {
@@ -20,11 +23,6 @@ const SignUp = ({navigation}) => {
             .createUserWithEmailAndPassword(email, pass)
             .then(() => {
               let userf = auth().currentUser;
-              console.log(
-                'currentUser userf (entrou no then do create user with email and pass): ',
-                userf,
-              );
-              console.log('userf.uid: ', userf.uid);
               let user = {};
               user.nome = name;
               user.email = email;
@@ -38,6 +36,23 @@ const SignUp = ({navigation}) => {
                   userf
                     .sendEmailVerification()
                     .then(() => {
+                      if (switchUser) {
+                        if (model && board && color) {
+                          // persistir no banco
+                          Alert.alert(
+                            'Motorista cadastrado! Carro: ' +
+                              model +
+                              ' placa: ' +
+                              board +
+                              ' cor: ' +
+                              color,
+                          );
+                        } else {
+                          Alert.alert(
+                            'Por favor informe dados validos para o automovel',
+                          );
+                        }
+                      }
                       Alert.alert(
                         'Aviso!',
                         'Foi enviado um e-mail de verificação para: ' + email,
@@ -87,6 +102,13 @@ const SignUp = ({navigation}) => {
       Alert.alert('Erro', 'Por favor, digite Nome, E-mail e senha válidos');
     }
   };
+
+  const [switchUser, setSwitchUser] = useState(false);
+
+  const selectUser = value => {
+    setSwitchUser(value);
+  };
+
   return (
     // Alert.alert(
     //   'Sucesso!',
@@ -131,6 +153,32 @@ const SignUp = ({navigation}) => {
         returnKeyType="go"
         onChangeText={t => setConfirmPass(t)}
       />
+      <Text>Você deseja criar conta como motorista?? </Text>
+      <Text>{switchUser ? 'Sim' : 'Não'}</Text>
+      <Switch onValueChange={selectUser} value={switchUser} />
+      {switchUser && (
+        <View>
+          <Text>Oi motora </Text>
+          <TextInput
+            placeholder="Modelo do carro"
+            keyboardType="default"
+            returnKeyType="next"
+            onChangeText={t => setModel(t)}
+          />
+          <TextInput
+            placeholder="Placa"
+            keyboardType="default"
+            returnKeyType="next"
+            onChangeText={t => setBoard(t)}
+          />
+          <TextInput
+            placeholder="Cor"
+            keyboardType="default"
+            returnKeyType="next"
+            onChangeText={t => setColor(t)}
+          />
+        </View>
+      )}
       <UAbutton text="Criar conta" onClick={register} />
     </Body>
   );

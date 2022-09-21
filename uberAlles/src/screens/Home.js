@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import UAbutton from '../componentes/UAbutton';
+import {COLORS} from '../assets/colors';
+import LogoutButton from '../componentes/LogoutButton';
 
-const Home = props => {
-  const [contador, setContador] = useState(0);
+const Home = ({navigation}) => {
+  // const [contador, setContador] = useState(0);
 
   // useEffect: tem a ver com o estado de vida do componente[DUVIDA, QUAL COMPONENTE?]
 
@@ -22,19 +24,27 @@ const Home = props => {
   //   console.log('fez update no contador');
   // }, [contador]);
 
-  const cont = () => {
-    setContador(contador + 1);
-  };
+  // const cont = () => {
+  //   setContador(contador + 1);
+  // };
 
-  const reset = () => {
-    setContador(0);
-  };
+  // const reset = () => {
+  //   setContador(0);
+  // };
+
+  useEffect(() => {
+    navigation.setOptions({
+      // headerLeft: false,
+      title: 'Usuários',
+      headerStyle: {backgroundColor: COLORS.primary},
+      headerTitleStyle: {color: COLORS.white},
+      headerRight: () => <LogoutButton />,
+    });
+  }, []);
 
   return (
-    <View>
-      <Text style={styles.text}>Contador = {contador}</Text>
-      <UAbutton text="Contar" onClick={cont} />
-      <UAbutton text="Reset" onClick={reset} />
+    <View style={styles.container}>
+      <Text style={styles.text}>Home</Text>
     </View>
   );
 };
@@ -42,6 +52,11 @@ const Home = props => {
 export default Home;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   text: {
     fontSize: 30,
   },
