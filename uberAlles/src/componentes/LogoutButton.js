@@ -32,6 +32,7 @@ const LogoutButton = () => {
             .catch(e => {
                 console.log('logoutbutton, signout em removeitem: ' + e);
             });
+    };
 
     return (
         <ButtonExit onPress={signOut} underlayColor="transparent">
