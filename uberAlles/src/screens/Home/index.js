@@ -5,6 +5,8 @@ import LogoutButton from '../../componentes/LogoutButton';
 import {Container, FlatList} from './styles';
 import Item from './Item';
 import firestore from '@react-native-firebase/firestore';
+import {CommonActions} from '@react-navigation/native';
+import Loading from '../../componentes/Loading';
 
 const Home = ({navigation}) => {
   // const [contador, setContador] = useState(0);
@@ -35,30 +37,36 @@ const Home = ({navigation}) => {
   // };
 
   const [data, setData] = useState([]);
+  // começa com o loading true
+  const [loading, setLoading] = useState(true);
 
   const getUsers = () => {
     // tratar pra pegar só dos que tem email confirmado
-    firestore()
+    const unsubscribe = firestore()
       .collection('users')
-      .get()
-      .then(querySnapshot => {
-        let d = [];
-        querySnapshot.forEach(doc => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, ' => ', doc.data());
-          const user = {
-            id: doc.id,
-            nome: doc.data().nome,
-            email: doc.data().email,
-          };
-          d.push(user);
-        });
-        console.log('d: ', d);
-        setData(d);
-      })
-      .catch(e => {
-        console.log('Home, getUsers: ' + e);
-      });
+      .onSnapshot(
+        querySnapshot => {
+          let d = [];
+          //listner
+          querySnapshot.forEach(doc => {
+            // doc.data() is never undefined for query doc snapshots
+            const user = {
+              id: doc.id,
+              nome: doc.data().nome,
+              email: doc.data().email,
+            };
+            d.push(user);
+          });
+          console.log('d: ', d);
+          setData(d);
+          setLoading(false);
+        },
+        e => {
+          console.log('Home, getUsers: ' + e);
+        },
+      );
+
+    return unsubscribe;
   };
 
   useEffect(() => {
@@ -69,11 +77,25 @@ const Home = ({navigation}) => {
       headerTitleStyle: {color: COLORS.white},
       headerRight: () => <LogoutButton />,
     });
-    getUsers();
+    // ao montar o componente chama o getUsers
+    const unsubscribe = getUsers();
+
+    // componentDidUnmount
+    return () => {
+      console.log('ao desmontar o componente home');
+      unsubscribe();
+    };
   }, []);
 
   const routeUser = item => {
     console.log(item);
+    // navigation.navigate('User');
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'User',
+        params: {user: item},
+      }),
+    );
   };
 
   const renderItem = ({item}) => (
@@ -87,6 +109,7 @@ const Home = ({navigation}) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
+      {loading && <Loading />}
     </Container>
   );
 };

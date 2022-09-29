@@ -17,10 +17,12 @@ import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
+import Loading from '../componentes/Loading';
 
 const SignIn = props => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const recoverPassword = () => {
     props.navigation.navigate('ForgotPass');
@@ -31,6 +33,7 @@ const SignIn = props => {
       value.pass = pass; //guardando a senha
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('user', jsonValue);
+      setLoading(false);
       props.navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -62,11 +65,13 @@ const SignIn = props => {
   const login = () => {
     //tratar focus ao errar
     if (email !== '' && pass !== '') {
+      setLoading(true);
       auth()
         .signInWithEmailAndPassword(email, pass)
         .then(() => {
           if (!auth().currentUser.emailVerified) {
             Alert.alert('Erro', 'E-mail da conta não confirmado!');
+            setLoading(false);
             return;
           }
           getUser();
@@ -74,6 +79,7 @@ const SignIn = props => {
           setPass('');
         })
         .catch(e => {
+          setLoading(false);
           console.log('erro ao logar: ' + e);
           switch (e.code) {
             case 'auth/user-not-found':
@@ -150,6 +156,7 @@ const SignIn = props => {
           </View>
         </View>
       </ScrollView>
+      {loading && <Loading />}
     </SafeAreaView>
   );
 };
