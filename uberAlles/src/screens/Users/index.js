@@ -8,7 +8,7 @@ import firestore from '@react-native-firebase/firestore';
 import {CommonActions} from '@react-navigation/native';
 import Loading from '../../componentes/Loading';
 
-const Home = ({navigation}) => {
+const Users = ({navigation}) => {
   // const [contador, setContador] = useState(0);
 
   // useEffect: tem a ver com o estado de vida do componente[DUVIDA, QUAL COMPONENTE?]
@@ -114,4 +114,4 @@ const Home = ({navigation}) => {
   );
 };
 
-export default Home;
+export default Users;
