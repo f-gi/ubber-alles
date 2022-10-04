@@ -14,7 +14,7 @@ import {
 import UAbutton from '../componentes/UAbutton';
 import {COLORS} from '../assets/colors';
 import auth from '@react-native-firebase/auth';
-import {CommonActions} from '@react-navigation/native';
+// import {CommonActions} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import Loading from '../componentes/Loading';
@@ -34,12 +34,12 @@ const SignIn = props => {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('user', jsonValue);
       setLoading(false);
-      props.navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Drivers'}],
-        }),
-      );
+      // props.navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 0,
+      //     routes: [{name: 'Drivers'}],
+      //   }),
+      // );
     } catch (e) {
       console.log('Sign: erro no storage: ', e);
     }
